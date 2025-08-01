@@ -1,0 +1,66 @@
+{
+  "version": 8,
+  "sources": {
+    "osm": {
+      "type": "raster",
+      "tiles": ["https://tile.openstreetmap.org/{z}/{x}/{y}.png"],
+      "tileSize": 256,
+      "minzoom": 0,
+      "maxzoom": 19,
+      "attribution": "© OpenStreetMap contributors"
+    },
+    "white": {
+      "type": "raster",
+      "tiles": ["https://cyberjapandata.gsi.go.jp/xyz/blank/{z}/{x}/{y}.png"],
+      "tileSize": 256,
+      "minzoom": 5,
+      "maxzoom": 14,
+      "attribution": "<a href=\"https://maps.gsi.go.jp/development/ichiran.html\" target=\"_blank\">国土地理院</a>"
+    },
+    "nuclear_power_plant": {
+      "type": "vector",
+      "url": "pmtiles:///power-plant-map/nuclear_power_plant.pmtiles",
+      "attribution": "国土数値情報（発電施設1.1版）",
+      "minzoom": 4,
+      "maxzoom": 16
+    }
+  },
+  "glyphs": "font/{fontstack}/{range}.pbf",
+  "layers": [
+    {
+      "id": "white-background",
+      "type": "raster",
+      "source": "white",
+      "minzoom": 5,
+      "paint": {
+        "raster-opacity": 0.5
+      }
+    },
+    {
+      "id": "nuclear_power_plant",
+      "type": "symbol",
+      "source": "nuclear_power_plant",
+      "source-layer": "nuclear_power_plant",
+      "filter": ["has", "status"],
+      "layout": {
+        "text-field": ["concat", ["get", "name"], ["get", "unit"], "号機"],
+        "text-font": ["Noto Sans Regular"],
+        "text-size": 10,
+        "text-variable-anchor": ["top", "right", "bottom", "left"],
+        "text-justify": "auto",
+        "text-radial-offset": 1.0,
+        "icon-image": "icon",
+        "icon-size": 0.8,
+        "icon-allow-overlap": true,
+        "symbol-placement": "point"
+      },
+      "paint": {
+        "text-color": ["case", ["==", ["get", "status"], "running"], "#d33", "#888888"],
+        "text-halo-color": "#ffffff",
+        "text-halo-width": 1,
+        "icon-opacity": ["case", ["==", ["get", "status"], "running"], 1, 0.2]
+      },
+      "minzoom": 4
+    }
+  ]
+}
