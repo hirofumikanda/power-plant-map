@@ -31,7 +31,7 @@ const buildPopupContent = (feature: MapGeoJSONFeature): string => {
       )
     )
       continue;
-    if (key == "power") value = `${value} 万kW`;
+    if (key == "power") value = `${Math.round(value * 100) / 100} 万kW`;
     if (key == "unit") value = `${value} 号機`;
     if (key == "reactor_type") {
       if (value === 1) {
@@ -53,11 +53,11 @@ const buildPopupContent = (feature: MapGeoJSONFeature): string => {
     if (key == "status") {
       if (value === "running") {
         value = "再稼働";
-      } else if (value === "pass") {
+      } else if (value === "passed") {
         value = "安全審査合格";
-      } else if (value === "fail") {
+      } else if (value === "failed") {
         value = "安全審査不合格";
-      } else if (value === "reviewed") {
+      } else if (value === "reviewing") {
         value = "審査中";
       } else {
         value = "廃炉または未申請";
