@@ -27,7 +27,8 @@ const buildPopupContent = (feature: MapGeoJSONFeature): string => {
         key == "power" ||
         key == "unit" ||
         key == "status" ||
-        key == "reactor_type"
+        key == "reactor_type" ||
+        key == "start_date"
       )
     )
       continue;
