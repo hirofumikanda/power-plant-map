@@ -1,26 +1,24 @@
 {
   "version": 8,
   "sources": {
-    "osm": {
-      "type": "raster",
-      "tiles": ["https://tile.openstreetmap.org/{z}/{x}/{y}.png"],
-      "tileSize": 256,
-      "minzoom": 0,
-      "maxzoom": 19,
-      "attribution": "© OpenStreetMap contributors"
+    "prefectures": {
+      "type": "vector",
+      "url": "pmtiles:///power-plant-map/data/prefectures.pmtiles",
+      "attribution": "<a href=\"https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-N03-2025.html\" target=\"_blank\">国土数値情報（行政区域データ）</a>を加工して作成",
+      "minzoom": 4,
+      "maxzoom": 10
     },
-    "white": {
-      "type": "raster",
-      "tiles": ["https://cyberjapandata.gsi.go.jp/xyz/blank/{z}/{x}/{y}.png"],
-      "tileSize": 256,
-      "minzoom": 5,
-      "maxzoom": 14,
-      "attribution": "<a href=\"https://maps.gsi.go.jp/development/ichiran.html\" target=\"_blank\">国土地理院</a>"
+    "prefectures_label": {
+      "type": "vector",
+      "url": "pmtiles:///power-plant-map/data/prefectures_label.pmtiles",
+      "attribution": "<a href=\"https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-N03-2025.html\" target=\"_blank\">国土数値情報（行政区域データ）</a>を加工して作成",
+      "minzoom": 4,
+      "maxzoom": 10
     },
     "nuclear_power_plant": {
       "type": "vector",
-      "url": "pmtiles:///power-plant-map/nuclear_power_plant.pmtiles",
-      "attribution": "国土数値情報（発電施設1.1版）",
+      "url": "pmtiles:///power-plant-map/data/nuclear_power_plant.pmtiles",
+      "attribution": "<a href=\"https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-P03.html\" target=\"_blank\">国土数値情報（発電施設1.1版）</a>を加工して作成",
       "minzoom": 4,
       "maxzoom": 16
     }
@@ -28,13 +26,41 @@
   "glyphs": "font/{fontstack}/{range}.pbf",
   "layers": [
     {
-      "id": "white-background",
-      "type": "raster",
-      "source": "white",
-      "minzoom": 5,
+      "id": "background",
+      "type": "background",
       "paint": {
-        "raster-opacity": 0.5
+        "background-color": "rgb(138, 216, 236)"
       }
+    },
+    {
+      "id": "prefectures",
+      "type": "fill",
+      "source": "prefectures",
+      "source-layer": "prefectures",
+      "paint": {
+        "fill-color": "rgb(255, 255, 255)",
+        "fill-outline-color": "rgb(0, 0, 0)",
+        "fill-opacity": 1
+      },
+      "minzoom": 4
+    },
+    {
+      "id": "prefectures_label",
+      "type": "symbol",
+      "source": "prefectures_label",
+      "source-layer": "prefectures_label",
+      "layout": {
+        "text-field": ["get", "name"],
+        "text-font": ["Noto Sans Regular"],
+        "text-size": 10,
+        "text-anchor": "center"
+      },
+      "paint": {
+        "text-color": "#888",
+        "text-halo-color": "#ffffff",
+        "text-halo-width": 1
+      },
+      "minzoom": 5
     },
     {
       "id": "nuclear_power_plant",
@@ -48,17 +74,24 @@
         "text-size": 10,
         "text-variable-anchor": ["top", "right", "bottom", "left"],
         "text-justify": "auto",
-        "text-radial-offset": 1.0,
+        "text-radial-offset": 1.5,
         "icon-image": "icon",
-        "icon-size": 0.8,
+        "icon-size": 0.6,
         "icon-allow-overlap": true,
         "symbol-placement": "point"
       },
       "paint": {
-        "text-color": ["case", ["==", ["get", "status"], "running"], "#d33", "#888888"],
+        "text-color": [
+          "match",
+          ["get", "status"],
+          "running",
+          "#d33",
+          "passed",
+          "#33d",
+          "#000"
+        ],
         "text-halo-color": "#ffffff",
-        "text-halo-width": 1,
-        "icon-opacity": ["case", ["==", ["get", "status"], "running"], 1, 0.2]
+        "text-halo-width": 1
       },
       "minzoom": 4
     }
