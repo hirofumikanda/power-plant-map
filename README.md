@@ -9,6 +9,9 @@
 - 原子力発電所をクリックすると詳細情報をポップアップ表示
 - 電力量から全体発電量からの比率を表示
 
+## デモ
+[GitHub Pagesで公開中](https://hirofumikanda.github.io/power-plant-map/)
+
 ## 🗂️ ディレクトリ構成
 
 ```
